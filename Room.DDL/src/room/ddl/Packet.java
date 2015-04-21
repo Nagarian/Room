@@ -11,9 +11,16 @@ package room.ddl;
  */
 public class Packet {
     
-    private Client userInfo;
-    private String message;
+    private final Client userInfo;
+    private final String message;
+    private final String status;
 
+    public Packet(Client userInfo, String message, String status) {
+        this.userInfo = userInfo;
+        this.message = message;
+        this.status = status;
+    }
+    
     /**
      * Get the value of userInfo
      *
@@ -24,15 +31,6 @@ public class Packet {
     }
 
     /**
-     * Set the value of userInfo
-     *
-     * @param userInfo new value of userInfo
-     */
-    public void setUserInfo(Client userInfo) {
-        this.userInfo = userInfo;
-    }
-
-    /**
      * Get the value of message
      *
      * @return the value of message
@@ -40,14 +38,13 @@ public class Packet {
     public String getMessage() {
         return message;
     }
-
+    
     /**
-     * Set the value of message
+     * Get the value of status
      *
-     * @param message new value of message
+     * @return the value of status
      */
-    public void setMessage(String message) {
-        this.message = message;
+    public String getStatus() {
+        return status;
     }
-
 }
