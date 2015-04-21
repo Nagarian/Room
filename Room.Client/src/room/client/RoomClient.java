@@ -5,6 +5,8 @@
  */
 package room.client;
 
+import room.gui.Connection_GUI;
+
 /**
  *
  * @author Benoît
