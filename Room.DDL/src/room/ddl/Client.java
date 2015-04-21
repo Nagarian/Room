@@ -6,13 +6,15 @@
 package room.ddl;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
  * @author Benoît
  */
 public class Client {
-    
+
     private final CommunicationInfo ownAddress;
     private final Room room;
     private String pseudo;
@@ -22,7 +24,28 @@ public class Client {
         this.room = room;
         this.pseudo = pseudo;
     }
-    
+
+    public Client(String json) throws ParseException {
+        JSONObject obj = (JSONObject) new JSONParser().parse(json);
+        if (obj.containsKey("ownAddress")) {
+            this.ownAddress = new CommunicationInfo(obj.get("ownAddress").toString());
+        } else {
+            this.ownAddress = null;
+        }
+
+        if (obj.containsKey("room")) {
+            this.room = new Room(obj.get("room").toString());
+        } else {
+            this.room = null;
+        }
+
+        if (obj.containsKey("pseudo")) {
+            this.pseudo = obj.get("pseudo").toString();
+        } else {
+            this.pseudo = null;
+        }
+    }
+
     /**
      * Get the value of ownAddress
      *
@@ -65,9 +88,9 @@ public class Client {
         if (this.room != null) {
             jsonObj.put("room", this.room.toJson());
         }
-        
+
         jsonObj.put("pseudo", this.pseudo);
-        
+
         return jsonObj;
     }
 }

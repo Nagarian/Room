@@ -8,6 +8,8 @@ package room.ddl;
 import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -34,6 +36,29 @@ public class Room {
         }
 
         this.id = 0;
+    }
+
+    public Room(String json) throws ParseException {
+        JSONObject obj = (JSONObject) new JSONParser().parse(json);
+
+        if (obj.containsKey("name")) {
+            this.name = obj.get("name").toString();
+        } else {
+            this.name = null;
+        }
+
+        this.clients = new ArrayList<Client>();
+        if (obj.containsKey("clients")) {
+            for (Object object : (JSONArray) obj.get("clients")) {
+                this.clients.add(new Client(object.toString()));
+            }
+        }
+
+        if (obj.containsKey("id")) {
+            this.id = Integer.parseInt(obj.get("id").toString());
+        } else {
+            this.id = 0;
+        }
     }
 
     /**
