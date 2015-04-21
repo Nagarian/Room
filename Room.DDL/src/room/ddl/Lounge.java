@@ -16,9 +16,9 @@ public class Lounge {
     private final CommunicationInfo address;
     private final ArrayList<Room> salles;
 
-    public Lounge(CommunicationInfo address, ArrayList<Room> salles) {
+    public Lounge(CommunicationInfo address) {
         this.address = address;
-        this.salles = salles;
+        this.salles = new ArrayList<Room>();
     }
     
     /**
