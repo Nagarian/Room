@@ -16,6 +16,11 @@ public class RoomClient {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Connection_GUI _connection = new Connection_GUI();
+         _connection.setVisible(true);
+        
+        
+        
     }
     
 }
