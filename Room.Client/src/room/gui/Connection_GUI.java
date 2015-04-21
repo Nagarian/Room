@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package room.client;
+package room.gui;
+
+import room.gui.Salon_GUI;
 
 /**
  *
@@ -35,7 +37,6 @@ public class Connection_GUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(399, 199));
         setMinimumSize(new java.awt.Dimension(399, 199));
         setSize(new java.awt.Dimension(399, 199));
 
