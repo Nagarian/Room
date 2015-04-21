@@ -6,6 +6,8 @@
 package room.ddl;
 
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -37,5 +39,19 @@ public class Lounge {
      */
     public ArrayList<Room> getSalles() {
         return salles;
+    }
+
+    public JSONObject toJson() {
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("address", this.address.toJson());
+
+        JSONArray array = new JSONArray();
+        salles.stream().forEach((salle) -> {
+            array.add(salle.toJson());
+        });
+        
+        jsonObj.put("salles", array);
+        
+        return jsonObj;
     }
 }

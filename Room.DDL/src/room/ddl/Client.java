@@ -5,6 +5,8 @@
  */
 package room.ddl;
 
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author Benoît
@@ -57,4 +59,15 @@ public class Client {
         this.pseudo = pseudo;
     }
 
+    public JSONObject toJson() {
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("ownAddress", this.ownAddress.toJson());
+        if (this.room != null) {
+            jsonObj.put("room", this.room.toJson());
+        }
+        
+        jsonObj.put("pseudo", this.pseudo);
+        
+        return jsonObj;
+    }
 }

@@ -5,6 +5,9 @@
  */
 package room.ddl;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author Benoît
@@ -46,5 +49,14 @@ public class Packet {
      */
     public String getStatus() {
         return status;
+    }
+
+    public JSONObject toJson() {
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("userInfo", this.userInfo.toJson());
+        jsonObj.put("message", this.message);
+        jsonObj.put("status", this.status);
+        
+        return jsonObj;
     }
 }

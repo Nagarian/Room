@@ -5,6 +5,8 @@
  */
 package room.ddl;
 
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author Benoît
@@ -35,5 +37,13 @@ public class CommunicationInfo {
      */
     public int getPort() {
         return port;
+    }
+
+    public JSONObject toJson() {
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("ip", this.ip);
+        jsonObj.put("port", this.port);
+        
+        return jsonObj;
     }
 }

@@ -6,13 +6,15 @@
 package room.ddl;
 
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
  * @author Benoît
  */
 public class Room {
-    
+
     private final String name;
     private final ArrayList<Client> clients;
     private final int id;
@@ -23,14 +25,17 @@ public class Room {
         this.clients = clients;
         this.id = id;
     }
-    
+
     public Room(String name, Client client) {
         this.name = name;
         this.clients = new ArrayList<>();
-        this.clients.add(client);
+        if (client != null) {
+            this.clients.add(client);
+        }
+
         this.id = 0;
     }
-    
+
     /**
      * Get the value of name
      *
@@ -56,5 +61,20 @@ public class Room {
      */
     public int getId() {
         return id;
+    }
+
+    public JSONObject toJson() {
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("id", this.id);
+        jsonObj.put("name", this.name);
+
+        JSONArray array = new JSONArray();
+        clients.stream().forEach((client) -> {
+            array.add(client.toJson());
+        });
+
+        jsonObj.put("clients", clients);
+
+        return jsonObj;
     }
 }
