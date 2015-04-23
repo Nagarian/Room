@@ -5,7 +5,6 @@
  */
 package room.ddl;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -18,12 +17,12 @@ public class Packet {
 
     private final Client userInfo;
     private final String message;
-    private final String status;
+    private String status;
 
-    public Packet(Client userInfo, String message, String status) {
+    public Packet(Client userInfo, String message, PacketStatusEnum status) {
         this.userInfo = userInfo;
         this.message = message;
-        this.status = status;
+        setPacketStatusEnum(status);
     }
 
     public Packet(String json) throws ParseException {
@@ -74,7 +73,33 @@ public class Packet {
     public String getStatus() {
         return status;
     }
+    
+    public PacketStatusEnum getPacketStatus() {
+        switch (status) {
+            case "connection":
+                return PacketStatusEnum.Connection;
+            case "disconnection":
+                return PacketStatusEnum.Disconnection;
+            default:
+                return PacketStatusEnum.Invalid;
+        }
+    }
 
+    private void setPacketStatusEnum(PacketStatusEnum packetStatus) {
+        switch (packetStatus) {
+            
+            case Connection:
+                this.status = "connection";
+                break;
+            case Disconnection:
+                this.status = "disconnection";
+                break;
+            default:
+                this.status = "";
+                break;
+        }
+    }
+    
     public JSONObject toJson() {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("userInfo", this.userInfo.toJson());
