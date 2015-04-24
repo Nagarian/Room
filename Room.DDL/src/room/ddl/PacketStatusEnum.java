@@ -12,5 +12,7 @@ package room.ddl;
 public enum PacketStatusEnum {
     Invalid,
     Connection,
-    Disconnection
+    Disconnection,
+    EnterRoom,
+    ExitRoom
 }

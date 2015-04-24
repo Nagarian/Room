@@ -18,11 +18,13 @@ import org.json.simple.parser.ParseException;
 public class Lounge {
 
     private final CommunicationInfo address;
-    private final ArrayList<Room> salles;
+    private final ArrayList<Room> rooms;
+    private final ArrayList<Client> clients;
 
     public Lounge(CommunicationInfo address) {
         this.address = address;
-        this.salles = new ArrayList<Room>();
+        this.rooms = new ArrayList<Room>();
+        this.clients = new ArrayList<Client>();
     }
 
     public Lounge(String json) throws ParseException {
@@ -34,12 +36,14 @@ public class Lounge {
             this.address = null;
         }
 
-        this.salles = new ArrayList<>();
+        this.rooms = new ArrayList<>();
         if (obj.containsKey("salles")) {
             for (Object object : (JSONArray) obj.get("salles")) {
-                this.salles.add(new Room(object.toString()));
+                this.rooms.add(new Room(object.toString()));
             }
         }
+
+        this.clients = new ArrayList<>();
     }
 
     /**
@@ -52,12 +56,49 @@ public class Lounge {
     }
 
     /**
-     * Get the value of salles
+     * Get the value of rooms
      *
-     * @return the value of salles
+     * @return the value of rooms
      */
-    public ArrayList<Room> getSalles() {
-        return salles;
+    public ArrayList<Room> getRooms() {
+        return rooms;
+    }
+
+    public void connectToRoom(Client client) {
+        Room room = client.getRoom();
+        Boolean isFind = false;
+
+        for (Room ro : rooms) {
+            if (ro.getName() == room.getName()) {
+                isFind = true;
+                Client newClient = new Client(client.getOwnAddress(), ro, client.getPseudo());
+                ro.addClient(newClient);
+                addClient(newClient);
+                break;
+            }
+        }
+
+        if (!isFind) {
+            this.rooms.add(room);
+            this.clients.add(client);
+        }
+    }
+
+    private void addClient(Client client) {
+        if (client != null) {
+            this.clients.add(client);
+        }
+    }
+
+    public void removeClient(Client client) {
+        if (client != null) {
+            if (!this.clients.remove(client)) {
+                this.clients.removeIf((cl) -> {
+                    return cl.getPseudo() == client.getPseudo()
+                            && cl.getRoom().getName() == client.getRoom().getName();
+                });
+            }
+        }
     }
 
     public JSONObject toJson() {
@@ -65,7 +106,7 @@ public class Lounge {
         jsonObj.put("address", this.address.toJson());
 
         JSONArray array = new JSONArray();
-        salles.stream().forEach((salle) -> {
+        rooms.stream().forEach((salle) -> {
             array.add(salle.toJson());
         });
 

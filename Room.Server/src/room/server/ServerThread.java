@@ -44,6 +44,7 @@ class ServerThread implements Runnable {
 
                 switch (incomingMessage.getPacketStatus()) {
                     case Connection:
+                        RoomServer.serverLounge.
                         break;
                     case Disconnection:
                         break;

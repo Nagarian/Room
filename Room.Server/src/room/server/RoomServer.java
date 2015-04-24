@@ -5,6 +5,7 @@
  */
 package room.server;
 
+import room.ddl.Lounge;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -13,7 +14,6 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import room.ddl.CommunicationInfo;
-import room.ddl.Lounge;
 
 /**
  *
@@ -22,7 +22,8 @@ import room.ddl.Lounge;
 public class RoomServer {
 
     public static final String ERREUR_MESSAGE = "ERROR";
-
+    public static Lounge serverLounge;
+    
     /**
      * @param args the command line arguments
      */
@@ -32,9 +33,9 @@ public class RoomServer {
         Socket socket = null;
 
         try {
-            Lounge server = new Lounge(new CommunicationInfo(InetAddress.getLocalHost().getHostAddress(), 23));
+            serverLounge = new Lounge(new CommunicationInfo(InetAddress.getLocalHost().getHostAddress(), 23));
 
-            serverSocker = new ServerSocket(server.getAddress().getPort());
+            serverSocker = new ServerSocket(serverLounge.getAddress().getPort());
             System.out.println("Serveur ouvert et à l'écoute...");
 
             do {

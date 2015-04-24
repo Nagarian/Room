@@ -78,6 +78,10 @@ public class Room {
     public ArrayList<Client> getClients() {
         return clients;
     }
+    
+    public void addClient(Client client) {
+        
+    }
 
     /**
      * Get the value of id
