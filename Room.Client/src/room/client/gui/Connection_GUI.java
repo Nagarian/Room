@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package room.gui;
+package room.client.gui;
 
-import room.gui.Salon_GUI;
+import room.client.gui.Salon_GUI;
 
 /**
  *

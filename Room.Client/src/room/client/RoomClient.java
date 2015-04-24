@@ -5,7 +5,7 @@
  */
 package room.client;
 
-import room.gui.Connection_GUI;
+import room.client.gui.Connection_GUI;
 
 /**
  *
