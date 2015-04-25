@@ -92,6 +92,16 @@ public class Packet {
                 return PacketStatusEnum.Connection;
             case "disconnection":
                 return PacketStatusEnum.Disconnection;
+            case "valid":
+                return PacketStatusEnum.Valid;
+            case "invalid":
+                return PacketStatusEnum.Invalid;
+            case "error":
+                return PacketStatusEnum.Error;
+            case "enterroom":
+                return PacketStatusEnum.EnterRoom;
+            case "exitroom":
+                return PacketStatusEnum.ExitRoom;
             default:
                 return PacketStatusEnum.Invalid;
         }
@@ -106,6 +116,24 @@ public class Packet {
             case Disconnection:
                 this.status = "disconnection";
                 break;
+                
+            case Valid:
+                this.status = "valid";
+                break;
+            case Invalid:
+                this.status = "invalid";
+                break;
+            case Error:
+                this.status = "error";
+                break;
+                
+            case EnterRoom:
+                this.status = "enterroom";
+                break;
+            case ExitRoom:
+                this.status = "exitroom";
+                break;
+                
             default:
                 this.status = "";
                 break;
@@ -123,6 +151,6 @@ public class Packet {
 
     @Override
     public String toString() {
-        return toJson().toJSONString(); //To change body of generated methods, choose Tools | Templates.
+        return toJson().toJSONString();
     }
 }
