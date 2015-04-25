@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
 import room.ddl.Packet;
 import room.ddl.PacketStatusEnum;
+import room.ddl.Room;
 
 /**
  *
@@ -44,7 +45,8 @@ class ServerThread implements Runnable {
 
                 switch (incomingMessage.getPacketStatus()) {
                     case Connection:
-                        RoomServer.serverLounge.
+                        RoomServer.serverLounge.addClient(incomingMessage.getUserInfo());
+                        socketOut.println(RoomServer.serverLounge.getRoomsToJson().toJSONString());
                         break;
                     case Disconnection:
                         break;

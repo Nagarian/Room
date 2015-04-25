@@ -63,29 +63,43 @@ public class Lounge {
     public ArrayList<Room> getRooms() {
         return rooms;
     }
+    
+    public JSONArray getRoomsToJson() {
+        JSONArray array = new JSONArray();
+        for (Room room : this.rooms) {
+            array.add(room.toJson());
+        }
+        
+        return array;
+    }
 
-    public void connectToRoom(Client client) {
+    public Room connectToRoom(Client client) {
         Room room = client.getRoom();
-        Boolean isFind = false;
 
         for (Room ro : rooms) {
             if (ro.getName() == room.getName()) {
-                isFind = true;
                 Client newClient = new Client(client.getOwnAddress(), ro, client.getPseudo());
                 ro.addClient(newClient);
                 addClient(newClient);
-                break;
+                return ro;
             }
         }
 
-        if (!isFind) {
-            this.rooms.add(room);
-            this.clients.add(client);
-        }
+        this.rooms.add(room);
+        addClient(client);
+        
+        return room;
     }
 
-    private void addClient(Client client) {
+    public void addClient(Client client) {
         if (client != null) {
+            for (Client cl : this.clients) {
+                if (client.getPseudo() == cl.getPseudo()
+                        && client.getRoom().getName() == cl.getRoom().getName()) {
+                    return;
+                }
+            };
+            
             this.clients.add(client);
         }
     }
