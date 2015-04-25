@@ -106,4 +106,12 @@ public class Room {
 
         return jsonObj;
     }
+
+    void removeClient(Client newClient) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    int getNumberOfParticipant() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

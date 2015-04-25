@@ -49,6 +49,7 @@ class ServerThread implements Runnable {
                         socketOut.println(RoomServer.serverLounge.getRoomsToJson().toJSONString());
                         break;
                     case Disconnection:
+                        RoomServer.serverLounge.removeClient(incomingMessage.getUserInfo());
                         break;
                     default:
                         socketOut.println(new Packet(null, "InvalidMessage", PacketStatusEnum.Invalid));

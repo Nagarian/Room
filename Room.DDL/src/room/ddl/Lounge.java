@@ -10,6 +10,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import room.ddl.exception.ClientAlreadyConnectedException;
 
 /**
  *
@@ -73,34 +74,47 @@ public class Lounge {
         return array;
     }
 
-    public Room connectToRoom(Client client) {
-        Room room = client.getRoom();
-
+    public Room connectToRoom(Client client, Room room) {
         for (Room ro : rooms) {
             if (ro.getName() == room.getName()) {
                 Client newClient = new Client(client.getOwnAddress(), ro, client.getPseudo());
                 ro.addClient(newClient);
-                addClient(newClient);
                 return ro;
             }
         }
 
         this.rooms.add(room);
-        addClient(client);
         
         return room;
     }
 
-    public void addClient(Client client) {
+    public void disconnectToRoom(Client client, Room room) {
+        Room roomToDelete = null;
+        
+        for (Room ro : rooms) {
+            if (ro.getName() == room.getName()) {
+                ro.removeClient(client);
+                if (ro.getNumberOfParticipant() == 0) {
+                    roomToDelete = ro;
+                    break;
+                }
+            }
+        }
+
+        if (roomToDelete != null) {
+            this.rooms.remove(roomToDelete);
+        }
+    }
+    
+    public void addClient(Client client) throws ClientAlreadyConnectedException {
         if (client != null) {
             for (Client cl : this.clients) {
-                if (client.getPseudo() == cl.getPseudo()
-                        && client.getRoom().getName() == cl.getRoom().getName()) {
-                    return;
+                if (client.getPseudo() == cl.getPseudo()) {
+                    throw new ClientAlreadyConnectedException();
                 }
             };
             
-            this.clients.add(client);
+            this.clients.add(new Client(client.getOwnAddress(), null, client.getPseudo()));
         }
     }
 
@@ -108,10 +122,21 @@ public class Lounge {
         if (client != null) {
             if (!this.clients.remove(client)) {
                 this.clients.removeIf((cl) -> {
-                    return cl.getPseudo() == client.getPseudo()
-                            && cl.getRoom().getName() == client.getRoom().getName();
+                    return cl.getPseudo() == client.getPseudo();
                 });
             }
+            
+            ArrayList<Room> roomToDelete = new ArrayList<Room>();
+            
+            for (Room room : rooms) {
+                room.removeClient(client);
+                
+                if (room.getNumberOfParticipant() == 0) {
+                    roomToDelete.add(room);
+                }
+            }
+            
+            this.rooms.removeAll(roomToDelete);
         }
     }
 
