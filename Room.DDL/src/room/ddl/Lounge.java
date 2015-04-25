@@ -148,7 +148,7 @@ public class Lounge {
         }
     }
 
-    public void sendMessage(Packet packet) {
+    public void sendMessage(Packet packet) throws RoomNotFoundException {
         Room room = packet.getUserInfo().getRoom();
         Client sender = packet.getUserInfo();
         String message = packet.getMessage();

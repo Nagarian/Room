@@ -11,10 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
-import room.ddl.Client;
 import room.ddl.Packet;
 import room.ddl.PacketStatusEnum;
 import room.ddl.Room;
@@ -72,9 +69,9 @@ class ServerThread implements Runnable {
 
                     case SendMessage:
                         try {
-                            RoomServer.serverLounge.sendMessage(packet);
+                            RoomServer.serverLounge.sendMessage(incomingMessage);
                             socketOut.println(new Packet(incomingMessage, ""));
-                        } catch (Exception e) {
+                        } catch (Exception ex) {
                             socketOut.println(new Packet(incomingMessage, ex.getLocalizedMessage(), PacketStatusEnum.Error).toString());
                         }
                         break;
