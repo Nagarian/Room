@@ -14,9 +14,11 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
+import room.ddl.Client;
 import room.ddl.Packet;
 import room.ddl.PacketStatusEnum;
 import room.ddl.Room;
+import room.ddl.exception.ClientAlreadyConnectedException;
 
 /**
  *
@@ -45,21 +47,27 @@ class ServerThread implements Runnable {
 
                 switch (incomingMessage.getPacketStatus()) {
                     case Connection:
-                        RoomServer.serverLounge.addClient(incomingMessage.getUserInfo());
-                        socketOut.println(RoomServer.serverLounge.getRoomsToJson().toJSONString());
+                        try {
+                            RoomServer.serverLounge.addClient(incomingMessage.getUserInfo());
+                            socketOut.println(new Packet(incomingMessage, RoomServer.serverLounge.getRoomsToJson().toJSONString()).toString());
+                        } catch (ClientAlreadyConnectedException ex) {
+                            socketOut.println(new Packet(incomingMessage, ex.getLocalizedMessage(), PacketStatusEnum.Error).toString());
+                        }
+                        
                         break;
                     case Disconnection:
                         RoomServer.serverLounge.removeClient(incomingMessage.getUserInfo());
+                        //socketOut.println(new Packet(incomingMessage, ""));
                         break;
                     default:
-                        socketOut.println(new Packet(null, "InvalidMessage", PacketStatusEnum.Invalid));
+                        socketOut.println(new Packet((Packet)null, "InvalidMessage", PacketStatusEnum.Invalid));
                         break;
                 }
 
             } catch (ParseException e) {
                 System.err.println(sourceToString + " a produit l'erreur " + e.getLocalizedMessage());
                 System.err.println(Arrays.toString(e.getStackTrace()));
-                socketOut.println(new Packet(null, "InvalidMessage", PacketStatusEnum.Invalid));
+                socketOut.println(new Packet((Packet)null, "InvalidMessage", PacketStatusEnum.Invalid));
             }
 
             System.out.println("Fermeture de la connexion " + sourceToString);

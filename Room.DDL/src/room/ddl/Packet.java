@@ -47,6 +47,18 @@ public class Packet {
         }
     }
 
+    public Packet(Packet packetRoResponseSuccessful, String message) {
+        this.userInfo = packetRoResponseSuccessful.getUserInfo();
+        this.message = message;
+        setPacketStatusEnum(PacketStatusEnum.Valid);
+    }
+    
+    public Packet(Packet packetRoResponse, String message, PacketStatusEnum status) {
+        this.userInfo = packetRoResponse.getUserInfo();
+        this.message = message;
+        setPacketStatusEnum(status);
+    }
+    
     /**
      * Get the value of userInfo
      *
@@ -107,5 +119,10 @@ public class Packet {
         jsonObj.put("status", this.status);
 
         return jsonObj;
+    }
+
+    @Override
+    public String toString() {
+        return toJson().toJSONString(); //To change body of generated methods, choose Tools | Templates.
     }
 }
