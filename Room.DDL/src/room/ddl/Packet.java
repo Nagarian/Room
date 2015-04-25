@@ -52,13 +52,13 @@ public class Packet {
         this.message = message;
         setPacketStatusEnum(PacketStatusEnum.Valid);
     }
-    
+
     public Packet(Packet packetRoResponse, String message, PacketStatusEnum status) {
         this.userInfo = packetRoResponse.getUserInfo();
         this.message = message;
         setPacketStatusEnum(status);
     }
-    
+
     /**
      * Get the value of userInfo
      *
@@ -85,7 +85,7 @@ public class Packet {
     public String getStatus() {
         return status;
     }
-    
+
     public PacketStatusEnum getPacketStatus() {
         switch (status) {
             case "connection":
@@ -102,6 +102,10 @@ public class Packet {
                 return PacketStatusEnum.EnterRoom;
             case "exitroom":
                 return PacketStatusEnum.ExitRoom;
+            case "sendmessage":
+                return PacketStatusEnum.SendMessage;
+            case "receivemessage":
+                return PacketStatusEnum.ReceiveMessage;
             default:
                 return PacketStatusEnum.Invalid;
         }
@@ -109,14 +113,14 @@ public class Packet {
 
     private void setPacketStatusEnum(PacketStatusEnum packetStatus) {
         switch (packetStatus) {
-            
+
             case Connection:
                 this.status = "connection";
                 break;
             case Disconnection:
                 this.status = "disconnection";
                 break;
-                
+
             case Valid:
                 this.status = "valid";
                 break;
@@ -126,20 +130,27 @@ public class Packet {
             case Error:
                 this.status = "error";
                 break;
-                
+
             case EnterRoom:
                 this.status = "enterroom";
                 break;
             case ExitRoom:
                 this.status = "exitroom";
                 break;
-                
+
+            case SendMessage:
+                this.status = "sendmessage";
+                break;
+            case ReceiveMessage:
+                this.status = "receivemessage";
+                break;
+
             default:
                 this.status = "";
                 break;
         }
     }
-    
+
     public JSONObject toJson() {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("userInfo", this.userInfo.toJson());

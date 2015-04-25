@@ -92,6 +92,14 @@ public class Room {
         return id;
     }
 
+    public void sendMessage(String message, Client from) {
+        for (Client client : clients) {
+            if (client.getPseudo() != from.getPseudo()) {
+                // TODO : faire l'envoi du message
+            }
+        }
+    }
+    
     public JSONObject toJson() {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("id", this.id);

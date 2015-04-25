@@ -53,21 +53,41 @@ class ServerThread implements Runnable {
                         } catch (ClientAlreadyConnectedException ex) {
                             socketOut.println(new Packet(incomingMessage, ex.getLocalizedMessage(), PacketStatusEnum.Error).toString());
                         }
-                        
                         break;
+
                     case Disconnection:
                         RoomServer.serverLounge.removeClient(incomingMessage.getUserInfo());
                         //socketOut.println(new Packet(incomingMessage, ""));
                         break;
+
+                    case EnterRoom:
+                        Room room = RoomServer.serverLounge.connectToRoom(incomingMessage.getUserInfo(), new Room(incomingMessage.getMessage()));
+                        socketOut.println(new Packet(incomingMessage, room.toJson().toJSONString()).toString());
+                        break;
+
+                    case ExitRoom:
+                        RoomServer.serverLounge.disconnectToRoom(incomingMessage.getUserInfo(), new Room(incomingMessage.getMessage()));
+                        //socketOut.println(new Packet(incomingMessage, ""));
+                        break;
+
+                    case SendMessage:
+                        try {
+                            RoomServer.serverLounge.sendMessage(packet);
+                            socketOut.println(new Packet(incomingMessage, ""));
+                        } catch (Exception e) {
+                            socketOut.println(new Packet(incomingMessage, ex.getLocalizedMessage(), PacketStatusEnum.Error).toString());
+                        }
+                        break;
+
                     default:
-                        socketOut.println(new Packet((Packet)null, "InvalidMessage", PacketStatusEnum.Invalid));
+                        socketOut.println(new Packet((Packet) null, "InvalidMessage", PacketStatusEnum.Invalid));
                         break;
                 }
 
             } catch (ParseException e) {
                 System.err.println(sourceToString + " a produit l'erreur " + e.getLocalizedMessage());
                 System.err.println(Arrays.toString(e.getStackTrace()));
-                socketOut.println(new Packet((Packet)null, "InvalidMessage", PacketStatusEnum.Invalid));
+                socketOut.println(new Packet((Packet) null, "InvalidMessage", PacketStatusEnum.Invalid));
             }
 
             System.out.println("Fermeture de la connexion " + sourceToString);

@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import room.ddl.exception.ClientAlreadyConnectedException;
+import room.ddl.exception.RoomNotFoundException;
 
 /**
  *
@@ -64,16 +65,23 @@ public class Lounge {
     public ArrayList<Room> getRooms() {
         return rooms;
     }
-    
+
     public JSONArray getRoomsToJson() {
         JSONArray array = new JSONArray();
         for (Room room : this.rooms) {
             array.add(room.toJson());
         }
-        
+
         return array;
     }
 
+    /**
+     * Permet de se connecter à une salle, si elle n'existe pas la créer
+     *
+     * @param client client qui se connecte
+     * @param room salle à laquelle se connecter
+     * @return salle connecté (le même objet si création de salle)
+     */
     public Room connectToRoom(Client client, Room room) {
         for (Room ro : rooms) {
             if (ro.getName() == room.getName()) {
@@ -84,13 +92,13 @@ public class Lounge {
         }
 
         this.rooms.add(room);
-        
+
         return room;
     }
 
     public void disconnectToRoom(Client client, Room room) {
         Room roomToDelete = null;
-        
+
         for (Room ro : rooms) {
             if (ro.getName() == room.getName()) {
                 ro.removeClient(client);
@@ -105,7 +113,7 @@ public class Lounge {
             this.rooms.remove(roomToDelete);
         }
     }
-    
+
     public void addClient(Client client) throws ClientAlreadyConnectedException {
         if (client != null) {
             for (Client cl : this.clients) {
@@ -113,7 +121,7 @@ public class Lounge {
                     throw new ClientAlreadyConnectedException();
                 }
             };
-            
+
             this.clients.add(new Client(client.getOwnAddress(), null, client.getPseudo()));
         }
     }
@@ -125,19 +133,34 @@ public class Lounge {
                     return cl.getPseudo() == client.getPseudo();
                 });
             }
-            
+
             ArrayList<Room> roomToDelete = new ArrayList<Room>();
-            
+
             for (Room room : rooms) {
                 room.removeClient(client);
-                
+
                 if (room.getNumberOfParticipant() == 0) {
                     roomToDelete.add(room);
                 }
             }
-            
+
             this.rooms.removeAll(roomToDelete);
         }
+    }
+
+    public void sendMessage(Packet packet) {
+        Room room = packet.getUserInfo().getRoom();
+        Client sender = packet.getUserInfo();
+        String message = packet.getMessage();
+        
+        for (Room ro : rooms) {
+            if (room.getName() == ro.getName()) {
+                ro.sendMessage(message, sender);
+                return;
+            }
+        }
+        
+        throw new RoomNotFoundException();
     }
 
     public JSONObject toJson() {
