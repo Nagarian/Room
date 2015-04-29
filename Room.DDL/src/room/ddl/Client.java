@@ -19,6 +19,12 @@ public class Client {
     private final Room room;
     private String pseudo;
 
+    public Client(CommunicationInfo ownAddress, String pseudo) {
+        this.ownAddress = ownAddress;
+        this.pseudo = pseudo;
+        this.room = null;
+    }
+    
     public Client(CommunicationInfo ownAddress, Room room, String pseudo) {
         this.ownAddress = ownAddress;
         this.room = room;

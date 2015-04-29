@@ -10,8 +10,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import room.ddl.Client;
 import room.ddl.CommunicationInfo;
 import room.ddl.Packet;
+import room.ddl.PacketStatusEnum;
+import room.ddl.Room;
 import room.ddl.exception.CommunicationException;
 import room.ddl.exception.InvalidDataException;
 
@@ -22,11 +29,39 @@ import room.ddl.exception.InvalidDataException;
 public class Connector {
 
     private final CommunicationInfo server;
+    private final Client userInfo;
 
-    public Connector(CommunicationInfo server) {
+    public Connector(CommunicationInfo server, Client userInfo) {
         this.server = server;
+        this.userInfo = userInfo;
+    }
+    
+    public ArrayList<Room> Connect() throws CommunicationException, InvalidDataException, Exception {
+        Packet packet = SendPacket(new Packet(userInfo, "", PacketStatusEnum.Connection));
+        
+        if (packet.getPacketStatus() != PacketStatusEnum.Valid) {
+            throw new Exception(packet.getMessage());
+        }
+        
+        try {
+            JSONArray obj = (JSONArray) new JSONParser().parse(packet.getMessage());
+            ArrayList<Room> rooms = new ArrayList<>();
+            
+            
+            for (Object jsonRoom : obj) {
+                rooms.add(new Room(jsonRoom.toString()));
+            }
+            
+            return rooms;
+        } catch (ParseException ex) {
+            throw new InvalidDataException();
+        }
     }
 
+    public Packet SendMessageTo(Room room, String message) throws CommunicationException, InvalidDataException {
+        return SendPacket(new Packet(new Client(userInfo.getOwnAddress(), room, userInfo.getPseudo()), message, PacketStatusEnum.SendMessage));
+    }
+    
     public Packet SendPacket(Packet packet) throws CommunicationException, InvalidDataException {
         Socket socket = null;
         BufferedReader reader = null;
