@@ -73,6 +73,9 @@ public class Connector {
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
+            packet.getUserInfo().getOwnAddress().setIp(socket.getInetAddress().toString());
+            packet.getUserInfo().getOwnAddress().setPort(socket.getPort());
+            
             writer.println(packet.toString());
             String result = reader.readLine();
 

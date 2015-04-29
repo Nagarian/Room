@@ -5,7 +5,13 @@
  */
 package room.client.gui;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import room.client.Connector;
 import room.client.gui.Salon_GUI;
+import room.ddl.Client;
+import room.ddl.CommunicationInfo;
+import room.ddl.exception.InvalidDataException;
 
 /**
  *
@@ -31,18 +37,18 @@ public class Connection_GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        pseudoBox = new javax.swing.JTextField();
+        serverBox = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        portBox = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(399, 199));
-        setSize(new java.awt.Dimension(399, 199));
 
-        jTextField1.setText("Pseudo");
+        pseudoBox.setText("Pseudo");
 
-        jTextField2.setText("Adresse IP");
+        serverBox.setText("Adresse IP");
 
         jButton1.setText("Connection");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -54,18 +60,22 @@ public class Connection_GUI extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Roomer");
 
+        portBox.setText("23");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(71, 71, 71)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextField1)
-                        .addComponent(jTextField2)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)))
+                    .addComponent(pseudoBox)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(serverBox, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(portBox)))
                 .addGap(78, 78, 78))
         );
         layout.setVerticalGroup(
@@ -74,9 +84,11 @@ public class Connection_GUI extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pseudoBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(serverBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(portBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addGap(33, 33, 33))
@@ -87,6 +99,18 @@ public class Connection_GUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.setVisible(false);
+        
+        Client client = new Client(new CommunicationInfo("", 0), pseudoBox.getText());
+        CommunicationInfo server = new CommunicationInfo(serverBox.getText(), Integer.parseInt(portBox.getText()));
+        Connector connector = new Connector(server, client);
+        try {
+            connector.Connect();
+        } catch (InvalidDataException ex) {
+            Logger.getLogger(Connection_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Connection_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         Salon_GUI _salon = new Salon_GUI();
         _salon.show();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -130,7 +154,8 @@ public class Connection_GUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField portBox;
+    private javax.swing.JTextField pseudoBox;
+    private javax.swing.JTextField serverBox;
     // End of variables declaration//GEN-END:variables
 }

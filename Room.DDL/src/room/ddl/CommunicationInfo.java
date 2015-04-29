@@ -15,8 +15,8 @@ import org.json.simple.parser.ParseException;
  */
 public class CommunicationInfo {
 
-    private final String ip;
-    private final int port;
+    private String ip;
+    private int port;
 
     public CommunicationInfo(String ip, int port) {
         this.ip = ip;
@@ -45,7 +45,7 @@ public class CommunicationInfo {
      * @return the value of ip
      */
     public String getIP() {
-        return ip;
+        return getIp();
     }
 
     /**
@@ -59,9 +59,30 @@ public class CommunicationInfo {
 
     public JSONObject toJson() {
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("ip", this.ip);
-        jsonObj.put("port", this.port);
+        jsonObj.put("ip", this.getIp());
+        jsonObj.put("port", this.getPort());
 
         return jsonObj;
+    }
+
+    /**
+     * @return the ip
+     */
+    public String getIp() {
+        return ip;
+    }
+
+    /**
+     * @param ip the ip to set
+     */
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    /**
+     * @param port the port to set
+     */
+    public void setPort(int port) {
+        this.port = port;
     }
 }
