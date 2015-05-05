@@ -6,6 +6,7 @@
 package room.client.gui;
 
 import javax.swing.JFrame;
+import room.client.Connector;
 
 /**
  *
@@ -19,6 +20,14 @@ public class Salle_GUI extends javax.swing.JFrame {
     public Salle_GUI() {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
+    Salle_GUI(Connector connector, String name) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        initComponents();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        this.setTitle(name);
     }
 
     /**

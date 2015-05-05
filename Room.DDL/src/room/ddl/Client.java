@@ -87,12 +87,15 @@ public class Client {
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
     }
-
-    public JSONObject toJson() {
+public JSONObject toJson() {
+ return this.toJson(false);
+}
+    
+    public JSONObject toJson(Boolean isSubItem) {
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("ownAddress", this.ownAddress.toJson());
-        if (this.room != null) {
-            jsonObj.put("room", this.room.toJson());
+        jsonObj.put("ownAddress", this.ownAddress.toJson().toJSONString());
+        if (this.room != null && !isSubItem) {
+            jsonObj.put("room", this.room.toJson().toJSONString());
         }
 
         jsonObj.put("pseudo", this.pseudo);

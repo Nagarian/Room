@@ -46,6 +46,7 @@ class ServerThread implements Runnable {
                     case Connection:
                         try {
                             RoomServer.serverLounge.addClient(incomingMessage.getUserInfo());
+                            //RoomServer.serverLounge.addRoom("Bobby", incomingMessage.getUserInfo());
                             socketOut.println(new Packet(incomingMessage, RoomServer.serverLounge.getRoomsToJson().toJSONString()).toString());
                         } catch (ClientAlreadyConnectedException ex) {
                             socketOut.println(new Packet(incomingMessage, ex.getLocalizedMessage(), PacketStatusEnum.Error).toString());

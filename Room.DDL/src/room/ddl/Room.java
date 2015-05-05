@@ -107,10 +107,10 @@ public class Room {
 
         JSONArray array = new JSONArray();
         clients.stream().forEach((client) -> {
-            array.add(client.toJson());
+            array.add(client.toJson(true).toJSONString());
         });
 
-        jsonObj.put("clients", clients);
+        jsonObj.put("clients", array);
 
         return jsonObj;
     }

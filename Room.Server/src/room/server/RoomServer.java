@@ -31,6 +31,7 @@ public class RoomServer {
 
         ServerSocket serverSocker = null;
         Socket socket = null;
+        
 
         try {
             serverLounge = new Lounge(new CommunicationInfo(InetAddress.getLocalHost().getHostAddress(), 23));

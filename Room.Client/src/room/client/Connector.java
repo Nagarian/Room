@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import room.ddl.Client;
@@ -34,6 +35,28 @@ public class Connector {
     public Connector(CommunicationInfo server, Client userInfo) {
         this.server = server;
         this.userInfo = userInfo;
+    }
+    
+    public Room ConnectToRoom(String _roomName) throws CommunicationException, InvalidDataException, Exception
+    {
+        Packet packet = SendPacket(new Packet(userInfo, new Room(_roomName, userInfo).toJson().toJSONString(), PacketStatusEnum.EnterRoom));
+        
+        if (packet.getPacketStatus() != PacketStatusEnum.Valid) {
+            throw new Exception(packet.getMessage());
+        }
+        
+        try {
+            JSONObject obj = (JSONObject) new JSONParser().parse(packet.getMessage());
+            Room room;
+            
+            
+               room = new Room(obj.toString());
+            
+            
+            return room;
+        } catch (ParseException ex) {
+            throw new InvalidDataException();
+        }
     }
     
     public ArrayList<Room> Connect() throws CommunicationException, InvalidDataException, Exception {

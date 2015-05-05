@@ -5,12 +5,16 @@
  */
 package room.client.gui;
 
+import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.UIManager;
 import room.client.Connector;
 import room.client.gui.Salon_GUI;
 import room.ddl.Client;
 import room.ddl.CommunicationInfo;
+import room.ddl.Room;
 import room.ddl.exception.InvalidDataException;
 
 /**
@@ -22,6 +26,8 @@ public class Connection_GUI extends javax.swing.JFrame {
     /**
      * Creates new form MainMenu_GUI
      */
+    
+    
     
     
     public Connection_GUI() {
@@ -100,19 +106,27 @@ public class Connection_GUI extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.setVisible(false);
         
+        ArrayList<Room> listOfRooms = new ArrayList<>();
+        
         Client client = new Client(new CommunicationInfo("", 0), pseudoBox.getText());
         CommunicationInfo server = new CommunicationInfo(serverBox.getText(), Integer.parseInt(portBox.getText()));
         Connector connector = new Connector(server, client);
         try {
-            connector.Connect();
+            listOfRooms = connector.Connect();
         } catch (InvalidDataException ex) {
             Logger.getLogger(Connection_GUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(Connection_GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        Salon_GUI _salon = new Salon_GUI();
-        _salon.show();
+        Salon_GUI _salon;
+        try {
+            _salon = new Salon_GUI(listOfRooms, connector);
+            _salon.show();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Connection_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -143,6 +157,7 @@ public class Connection_GUI extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

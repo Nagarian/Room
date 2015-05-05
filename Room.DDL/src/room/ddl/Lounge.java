@@ -28,6 +28,10 @@ public class Lounge {
         this.rooms = new ArrayList<Room>();
         this.clients = new ArrayList<Client>();
     }
+    
+    public void addRoom(String name, Client client){
+        this.rooms.add(new Room(name, client));
+    }
 
     public Lounge(String json) throws ParseException {
         JSONObject obj = (JSONObject) new JSONParser().parse(json);
