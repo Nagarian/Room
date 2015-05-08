@@ -11,6 +11,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -37,8 +39,8 @@ public class Connector {
         this.userInfo = userInfo;
     }
     
-    public Room ConnectToRoom(String _roomName) throws CommunicationException, InvalidDataException, Exception {
-        Packet packet = SendPacket(new Packet(userInfo, new Room(_roomName, userInfo).toJson().toJSONString(), PacketStatusEnum.EnterRoom));
+    public Room ConnectToRoom(String roomName) throws CommunicationException, InvalidDataException, Exception {
+        Packet packet = SendPacket(new Packet(userInfo, new Room(roomName, userInfo).toJson().toJSONString(), PacketStatusEnum.EnterRoom));
         
         if (packet.getPacketStatus() != PacketStatusEnum.Valid) {
             throw new Exception(packet.getMessage());
@@ -53,10 +55,26 @@ public class Connector {
         }
     }
     
+    public void ExitFromRoom(Room room){
+        try {
+            SendPacketWithoutResponse(new Packet(userInfo, room.toJson().toJSONString(), PacketStatusEnum.ExitRoom));
+        } catch (CommunicationException | InvalidDataException ex) {
+            Logger.getLogger(Connector.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public ArrayList<Room> Connect() throws CommunicationException, InvalidDataException, Exception {
         return GetRooms(PacketStatusEnum.Connection);
     }
 
+    public void Disconnect() {
+        try {
+            SendPacketWithoutResponse(new Packet(userInfo, "", PacketStatusEnum.Disconnection));
+        } catch (CommunicationException | InvalidDataException ex) {
+            Logger.getLogger(Connector.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public ArrayList<Room> RefreshLounge() throws CommunicationException, InvalidDataException, Exception {
         return GetRooms(PacketStatusEnum.GetRooms);
     }
@@ -109,6 +127,34 @@ public class Connector {
             throw new CommunicationException();
         } catch (org.json.simple.parser.ParseException ex) {
             throw new InvalidDataException();
+        } finally {
+            try {
+                socket.close();
+                reader.close();
+                writer.close();
+            } catch (IOException ex) {
+                throw new CommunicationException();
+            }
+        }
+    }
+    
+    public void SendPacketWithoutResponse(Packet packet) throws CommunicationException, InvalidDataException {
+        Socket socket = null;
+        BufferedReader reader = null;
+        PrintWriter writer = null;
+
+        try {
+
+            socket = new Socket(server.getIP(), server.getPort());
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new PrintWriter(socket.getOutputStream(), true);
+
+            packet.getUserInfo().getOwnAddress().setIp(socket.getInetAddress().toString());
+            packet.getUserInfo().getOwnAddress().setPort(socket.getPort());
+            
+            writer.println(packet.toString());
+        } catch (IOException ex) {
+            throw new CommunicationException();
         } finally {
             try {
                 socket.close();

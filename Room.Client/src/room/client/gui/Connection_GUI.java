@@ -7,6 +7,7 @@ package room.client.gui;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import room.client.Connector;
@@ -25,6 +26,7 @@ public class Connection_GUI extends javax.swing.JFrame {
      */
     public Connection_GUI() {
         initComponents();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     /**
@@ -107,7 +109,7 @@ public class Connection_GUI extends javax.swing.JFrame {
         try {
             connector.Connect();
                     
-            this.setVisible(false);
+            this.dispose();
             new Lounge_GUI(connector).show();
         } catch (ClassNotFoundException | InvalidDataException ex) {
             Logger.getLogger(Connection_GUI.class.getName()).log(Level.SEVERE, null, ex);

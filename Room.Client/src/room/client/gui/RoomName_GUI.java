@@ -87,7 +87,7 @@ public class RoomName_GUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        this.setVisible(false);
+        this.dispose();
 
         new Room_GUI(connector, roomNameBox.getText()).show();
     }//GEN-LAST:event_okButtonActionPerformed

@@ -8,7 +8,10 @@ package room.client.gui;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import room.client.Connector;
+import room.ddl.Room;
+import room.ddl.exception.CommunicationException;
 import room.ddl.exception.InvalidDataException;
 
 /**
@@ -17,12 +20,17 @@ import room.ddl.exception.InvalidDataException;
  */
 public class Room_GUI extends javax.swing.JFrame {
 
+    private final Connector connector;
+    private Room room;
+    
     Room_GUI(Connector connector, String name) {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.connector = connector;
+        this.room = null;
         
         try {
-            connector.ConnectToRoom(name);
+            this.room = connector.ConnectToRoom(name);
         } catch (InvalidDataException ex) {
             Logger.getLogger(Room_GUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -49,6 +57,11 @@ public class Room_GUI extends javax.swing.JFrame {
         jList1 = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -99,6 +112,10 @@ public class Room_GUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        connector.ExitFromRoom(room);
+    }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

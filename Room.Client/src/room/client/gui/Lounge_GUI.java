@@ -25,7 +25,7 @@ public class Lounge_GUI extends javax.swing.JFrame {
 
     public Lounge_GUI(Connector _connector) throws ClassNotFoundException {
         initComponents();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         connector = _connector;
     }
 
@@ -46,6 +46,9 @@ public class Lounge_GUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -149,6 +152,12 @@ public class Lounge_GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_openRoomButtonActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        connector.Disconnect();
+    }//GEN-LAST:event_formWindowClosing
+
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton newRoomButton;
