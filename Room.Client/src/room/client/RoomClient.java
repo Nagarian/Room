@@ -5,7 +5,6 @@
  */
 package room.client;
 
-import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 import com.jgoodies.looks.windows.WindowsLookAndFeel;
 import javax.swing.UIManager;
 import room.client.gui.Connection_GUI;
@@ -21,15 +20,12 @@ public class RoomClient {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-               try {
-      UIManager.setLookAndFeel(new WindowsLookAndFeel());
-   } catch (Exception e) {}
-        
+        try {
+            UIManager.setLookAndFeel(new WindowsLookAndFeel());
+        } catch (Exception e) {
+        }
+
         Connection_GUI _connection = new Connection_GUI();
-         _connection.setVisible(true);
-        
-        
-        
+        _connection.setVisible(true);
     }
-    
 }

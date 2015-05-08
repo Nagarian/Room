@@ -37,8 +37,7 @@ public class Connector {
         this.userInfo = userInfo;
     }
     
-    public Room ConnectToRoom(String _roomName) throws CommunicationException, InvalidDataException, Exception
-    {
+    public Room ConnectToRoom(String _roomName) throws CommunicationException, InvalidDataException, Exception {
         Packet packet = SendPacket(new Packet(userInfo, new Room(_roomName, userInfo).toJson().toJSONString(), PacketStatusEnum.EnterRoom));
         
         if (packet.getPacketStatus() != PacketStatusEnum.Valid) {
@@ -47,13 +46,8 @@ public class Connector {
         
         try {
             JSONObject obj = (JSONObject) new JSONParser().parse(packet.getMessage());
-            Room room;
+            return new Room(obj.toString());
             
-            
-               room = new Room(obj.toString());
-            
-            
-            return room;
         } catch (ParseException ex) {
             throw new InvalidDataException();
         }

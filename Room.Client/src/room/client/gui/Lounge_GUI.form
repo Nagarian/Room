@@ -31,9 +31,9 @@
               <Component id="jScrollPane1" min="-2" pref="286" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jButton1" max="32767" attributes="0"/>
-                  <Component id="jButton2" alignment="1" max="32767" attributes="0"/>
-                  <Component id="jButton3" alignment="1" max="32767" attributes="0"/>
+                  <Component id="resfreshLoungeButton" max="32767" attributes="0"/>
+                  <Component id="newRoomButton" alignment="1" max="32767" attributes="0"/>
+                  <Component id="openRoomButton" alignment="1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -45,11 +45,11 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <Component id="resfreshLoungeButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                      <Component id="newRoomButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                      <Component id="openRoomButton" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" pref="175" max="32767" attributes="0"/>
               </Group>
@@ -81,29 +81,28 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="resfreshLoungeButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Rafraichir"/>
-        <Property name="actionCommand" type="java.lang.String" value="Rafraichir"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="resfreshLoungeButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="newRoomButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Nouvelle Salle"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newRoomButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
+    <Component class="javax.swing.JButton" name="openRoomButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Ouvrir Salle"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="openRoomButtonActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

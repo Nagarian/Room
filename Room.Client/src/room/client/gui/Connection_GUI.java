@@ -5,17 +5,11 @@
  */
 package room.client.gui;
 
-import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.UIManager;
 import room.client.Connector;
-import room.client.gui.Salon_GUI;
 import room.ddl.Client;
 import room.ddl.CommunicationInfo;
-import room.ddl.Room;
-import room.ddl.exception.InvalidDataException;
 
 /**
  *
@@ -26,10 +20,6 @@ public class Connection_GUI extends javax.swing.JFrame {
     /**
      * Creates new form MainMenu_GUI
      */
-    
-    
-    
-    
     public Connection_GUI() {
         initComponents();
     }
@@ -45,7 +35,7 @@ public class Connection_GUI extends javax.swing.JFrame {
 
         pseudoBox = new javax.swing.JTextField();
         serverBox = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        connectionButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         portBox = new javax.swing.JTextField();
 
@@ -56,10 +46,11 @@ public class Connection_GUI extends javax.swing.JFrame {
 
         serverBox.setText("Adresse IP");
 
-        jButton1.setText("Connection");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        connectionButton.setText("Connection");
+        connectionButton.setActionCommand("Connexion");
+        connectionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                connectionButtonActionPerformed(evt);
             }
         });
 
@@ -77,7 +68,7 @@ public class Connection_GUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1)
                     .addComponent(pseudoBox)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addComponent(connectionButton, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(serverBox, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -96,78 +87,31 @@ public class Connection_GUI extends javax.swing.JFrame {
                     .addComponent(serverBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(portBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(connectionButton)
                 .addGap(33, 33, 33))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void connectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectionButtonActionPerformed
         this.setVisible(false);
-        
-        ArrayList<Room> listOfRooms = new ArrayList<>();
-        
+
+        // Création d'une nouvelle instance du connecteur
         Client client = new Client(new CommunicationInfo("", 0), pseudoBox.getText());
         CommunicationInfo server = new CommunicationInfo(serverBox.getText(), Integer.parseInt(portBox.getText()));
         Connector connector = new Connector(server, client);
+
+        // Puis on navigue vers la nouvelle fenêtre
         try {
-            listOfRooms = connector.Connect();
-        } catch (InvalidDataException ex) {
-            Logger.getLogger(Connection_GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(Connection_GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        Salon_GUI _salon;
-        try {
-            _salon = new Salon_GUI(listOfRooms, connector);
-            _salon.show();
+            new Lounge_GUI(connector).show();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Connection_GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Connection_GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Connection_GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Connection_GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Connection_GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Connection_GUI().setVisible(true);
-            }
-        });
-    }
+    }//GEN-LAST:event_connectionButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton connectionButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField portBox;
     private javax.swing.JTextField pseudoBox;
