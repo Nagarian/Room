@@ -54,7 +54,15 @@ public class Connector {
     }
     
     public ArrayList<Room> Connect() throws CommunicationException, InvalidDataException, Exception {
-        Packet packet = SendPacket(new Packet(userInfo, "", PacketStatusEnum.Connection));
+        return GetRooms(PacketStatusEnum.Connection);
+    }
+
+    public ArrayList<Room> RefreshLounge() throws CommunicationException, InvalidDataException, Exception {
+        return GetRooms(PacketStatusEnum.GetRooms);
+    }
+    
+    private ArrayList<Room> GetRooms(PacketStatusEnum status) throws CommunicationException, InvalidDataException, Exception {
+        Packet packet = SendPacket(new Packet(userInfo, "", status));
         
         if (packet.getPacketStatus() != PacketStatusEnum.Valid) {
             throw new Exception(packet.getMessage());
@@ -74,7 +82,7 @@ public class Connector {
             throw new InvalidDataException();
         }
     }
-
+    
     public Packet SendMessageTo(Room room, String message) throws CommunicationException, InvalidDataException {
         return SendPacket(new Packet(new Client(userInfo.getOwnAddress(), room, userInfo.getPseudo()), message, PacketStatusEnum.SendMessage));
     }

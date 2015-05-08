@@ -7,9 +7,12 @@ package room.client.gui;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import room.client.Connector;
 import room.ddl.Client;
 import room.ddl.CommunicationInfo;
+import room.ddl.exception.InvalidDataException;
 
 /**
  *
@@ -95,8 +98,6 @@ public class Connection_GUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void connectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectionButtonActionPerformed
-        this.setVisible(false);
-
         // Création d'une nouvelle instance du connecteur
         Client client = new Client(new CommunicationInfo("", 0), pseudoBox.getText());
         CommunicationInfo server = new CommunicationInfo(serverBox.getText(), Integer.parseInt(portBox.getText()));
@@ -104,9 +105,14 @@ public class Connection_GUI extends javax.swing.JFrame {
 
         // Puis on navigue vers la nouvelle fenêtre
         try {
+            connector.Connect();
+                    
+            this.setVisible(false);
             new Lounge_GUI(connector).show();
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | InvalidDataException ex) {
             Logger.getLogger(Connection_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex, "Une erreur s'est produite", ERROR_MESSAGE);
         }
     }//GEN-LAST:event_connectionButtonActionPerformed
 

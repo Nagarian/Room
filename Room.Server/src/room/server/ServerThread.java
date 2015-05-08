@@ -57,7 +57,11 @@ class ServerThread implements Runnable {
                         RoomServer.serverLounge.removeClient(incomingMessage.getUserInfo());
                         //socketOut.println(new Packet(incomingMessage, ""));
                         break;
-
+                        
+                    case GetRooms:
+                        socketOut.println(new Packet(incomingMessage, RoomServer.serverLounge.getRoomsToJson().toJSONString()).toString());
+                        break;
+                        
                     case EnterRoom:
                         Room room = RoomServer.serverLounge.connectToRoom(incomingMessage.getUserInfo(), new Room(incomingMessage.getMessage()));
                         socketOut.println(new Packet(incomingMessage, room.toJson().toJSONString()).toString());

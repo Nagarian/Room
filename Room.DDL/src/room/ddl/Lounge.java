@@ -88,7 +88,7 @@ public class Lounge {
      */
     public Room connectToRoom(Client client, Room room) {
         for (Room ro : rooms) {
-            if (ro.getName() == room.getName()) {
+            if (ro.getName().equals(room.getName())) {
                 Client newClient = new Client(client.getOwnAddress(), ro, client.getPseudo());
                 ro.addClient(newClient);
                 return ro;
@@ -104,7 +104,7 @@ public class Lounge {
         Room roomToDelete = null;
 
         for (Room ro : rooms) {
-            if (ro.getName() == room.getName()) {
+            if (ro.getName().equals(room.getName())) {
                 ro.removeClient(client);
                 if (ro.getNumberOfParticipant() == 0) {
                     roomToDelete = ro;
@@ -121,11 +121,11 @@ public class Lounge {
     public void addClient(Client client) throws ClientAlreadyConnectedException {
         if (client != null) {
             for (Client cl : this.clients) {
-                if (client.getPseudo() == cl.getPseudo()) {
+                if (client.getPseudo().equals(cl.getPseudo())) {
                     throw new ClientAlreadyConnectedException();
                 }
-            };
-
+            }
+            
             this.clients.add(new Client(client.getOwnAddress(), null, client.getPseudo()));
         }
     }
@@ -134,7 +134,7 @@ public class Lounge {
         if (client != null) {
             if (!this.clients.remove(client)) {
                 this.clients.removeIf((cl) -> {
-                    return cl.getPseudo() == client.getPseudo();
+                    return cl.getPseudo().equals(client.getPseudo());
                 });
             }
 
@@ -158,7 +158,7 @@ public class Lounge {
         String message = packet.getMessage();
         
         for (Room ro : rooms) {
-            if (room.getName() == ro.getName()) {
+            if (room.getName().equals(ro.getName())) {
                 ro.sendMessage(message, sender);
                 return;
             }

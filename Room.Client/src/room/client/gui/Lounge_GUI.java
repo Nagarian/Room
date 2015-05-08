@@ -23,19 +23,10 @@ public class Lounge_GUI extends javax.swing.JFrame {
     ArrayList<Room> listOfRooms;
     Connector connector;
 
-    /**
-     * Creates new form Salon_GUI
-     */
-    public Lounge_GUI() {
-        initComponents();
-    }
-
     public Lounge_GUI(Connector _connector) throws ClassNotFoundException {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         connector = _connector;
-        // Pas besoin de faire l'étape de connection puisque celle-ci se fait lorsque la fenêtre s'ouvre
-        // resfreshLoungeButtonActionPerformed(null);
     }
 
     /**
@@ -48,7 +39,7 @@ public class Lounge_GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        roomListBox = new javax.swing.JList();
         resfreshLoungeButton = new javax.swing.JButton();
         newRoomButton = new javax.swing.JButton();
         openRoomButton = new javax.swing.JButton();
@@ -60,12 +51,12 @@ public class Lounge_GUI extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        roomListBox.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(roomListBox);
 
         resfreshLoungeButton.setText("Rafraichir");
         resfreshLoungeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -122,7 +113,7 @@ public class Lounge_GUI extends javax.swing.JFrame {
 
     private void resfreshLoungeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resfreshLoungeButtonActionPerformed
         try {
-            listOfRooms = connector.Connect();
+            listOfRooms = connector.RefreshLounge();
         } catch (Exception ex) {
             Logger.getLogger(Lounge_GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -134,8 +125,8 @@ public class Lounge_GUI extends javax.swing.JFrame {
             model.addElement(_room.getName());
         }
 
-        jList1.setModel(model);
-        jList1.doLayout();
+        roomListBox.setModel(model);
+        roomListBox.doLayout();
     }//GEN-LAST:event_resfreshLoungeButtonActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -159,10 +150,10 @@ public class Lounge_GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_openRoomButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton newRoomButton;
     private javax.swing.JButton openRoomButton;
     private javax.swing.JButton resfreshLoungeButton;
+    private javax.swing.JList roomListBox;
     // End of variables declaration//GEN-END:variables
 }

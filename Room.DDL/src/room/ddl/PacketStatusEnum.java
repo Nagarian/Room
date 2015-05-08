@@ -15,6 +15,7 @@ public enum PacketStatusEnum {
     Error,
     Connection,
     Disconnection,
+    GetRooms,
     EnterRoom,
     ExitRoom,
     SendMessage,

@@ -98,6 +98,8 @@ public class Packet {
                 return PacketStatusEnum.Invalid;
             case "error":
                 return PacketStatusEnum.Error;
+            case "getrooms":
+                return PacketStatusEnum.GetRooms;
             case "enterroom":
                 return PacketStatusEnum.EnterRoom;
             case "exitroom":
@@ -119,6 +121,9 @@ public class Packet {
                 break;
             case Disconnection:
                 this.status = "disconnection";
+                break;
+            case GetRooms:
+                this.status = "getrooms";
                 break;
 
             case Valid:
