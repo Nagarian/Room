@@ -149,15 +149,17 @@ public class Lounge_GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_newRoomButtonActionPerformed
 
     private void openRoomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openRoomButtonActionPerformed
-        // TODO add your handling code here:
+        Object obj = roomListBox.getSelectedValue();
+        if (obj != null) {
+            new Room_GUI(connector, obj.toString()).show();
+        }
     }//GEN-LAST:event_openRoomButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         connector.Disconnect();
     }//GEN-LAST:event_formWindowClosing
 
-    
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton newRoomButton;

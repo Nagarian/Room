@@ -31,9 +31,7 @@ public class Room {
     public Room(String name, Client client) {
         this.name = name;
         this.clients = new ArrayList<>();
-        if (client != null) {
-            this.clients.add(client);
-        }
+        addClient(client);
 
         this.id = 0;
     }
@@ -78,9 +76,11 @@ public class Room {
     public ArrayList<Client> getClients() {
         return clients;
     }
-    
+
     public void addClient(Client client) {
-        
+        if (client != null) {
+            this.clients.add(client);
+        }
     }
 
     /**
@@ -99,7 +99,7 @@ public class Room {
             }
         }
     }
-    
+
     public JSONObject toJson() {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("id", this.id);
@@ -115,11 +115,15 @@ public class Room {
         return jsonObj;
     }
 
-    void removeClient(Client newClient) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    void removeClient(Client client) {
+        if (!this.clients.remove(client)) {
+            this.clients.removeIf((cl) -> {
+                return cl.getPseudo().equals(client.getPseudo());
+            });
+        }
     }
 
     int getNumberOfParticipant() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return clients.size();
     }
 }
