@@ -7,11 +7,11 @@ package room.client.gui;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import room.client.Connector;
+import room.ddl.Client;
 import room.ddl.Room;
-import room.ddl.exception.CommunicationException;
 import room.ddl.exception.InvalidDataException;
 
 /**
@@ -26,11 +26,14 @@ public class Room_GUI extends javax.swing.JFrame {
     Room_GUI(Connector connector, String name) {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        
         this.connector = connector;
         this.room = null;
         
         try {
             this.room = connector.ConnectToRoom(name);
+            refreshConnectedClients();
         } catch (InvalidDataException ex) {
             Logger.getLogger(Room_GUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -40,6 +43,20 @@ public class Room_GUI extends javax.swing.JFrame {
         this.setTitle(name);
     }
 
+    private void refreshConnectedClients() {
+        
+        DefaultListModel model = new DefaultListModel();
+
+        model.clear();
+        for (Client client : this.room.getClients()) {
+            model.addElement(client.getPseudo());
+        }
+
+        userListPanel.setModel(model);
+        userListPanel.doLayout();
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,11 +67,11 @@ public class Room_GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        messageDisplayBox = new javax.swing.JTextArea();
+        messageInputBox = new javax.swing.JTextField();
+        sendMessageButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        userListPanel = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -63,21 +80,21 @@ public class Room_GUI extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        messageDisplayBox.setColumns(20);
+        messageDisplayBox.setRows(5);
+        jScrollPane1.setViewportView(messageDisplayBox);
 
-        jTextField1.setText("jTextField1");
+        messageInputBox.setText("jTextField1");
 
-        jButton1.setText("Repondre");
+        sendMessageButton.setText("Répondre");
 
-        jList1.setBackground(new java.awt.Color(240, 240, 240));
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        userListPanel.setBackground(new java.awt.Color(240, 240, 240));
+        userListPanel.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(jList1);
+        jScrollPane2.setViewportView(userListPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -89,9 +106,9 @@ public class Room_GUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1)
+                        .addComponent(messageInputBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
+                        .addComponent(sendMessageButton))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -104,8 +121,8 @@ public class Room_GUI extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1)))
+                            .addComponent(messageInputBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sendMessageButton)))
                     .addComponent(jScrollPane2))
                 .addContainerGap())
         );
@@ -118,11 +135,11 @@ public class Room_GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextArea messageDisplayBox;
+    private javax.swing.JTextField messageInputBox;
+    private javax.swing.JButton sendMessageButton;
+    private javax.swing.JList userListPanel;
     // End of variables declaration//GEN-END:variables
 }

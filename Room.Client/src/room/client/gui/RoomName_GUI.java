@@ -39,6 +39,7 @@ public class RoomName_GUI extends javax.swing.JFrame {
         okButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         roomNameBox.setText("Test");
 

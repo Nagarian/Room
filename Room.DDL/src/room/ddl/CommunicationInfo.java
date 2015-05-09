@@ -45,7 +45,7 @@ public class CommunicationInfo {
      * @return the value of ip
      */
     public String getIP() {
-        return getIp();
+        return ip;
     }
 
     /**
@@ -59,17 +59,10 @@ public class CommunicationInfo {
 
     public JSONObject toJson() {
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("ip", this.getIp());
+        jsonObj.put("ip", this.getIP());
         jsonObj.put("port", this.getPort());
 
         return jsonObj;
-    }
-
-    /**
-     * @return the ip
-     */
-    public String getIp() {
-        return ip;
     }
 
     /**

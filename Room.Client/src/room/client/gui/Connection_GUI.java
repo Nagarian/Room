@@ -27,6 +27,7 @@ public class Connection_GUI extends javax.swing.JFrame {
     public Connection_GUI() {
         initComponents();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -45,14 +46,14 @@ public class Connection_GUI extends javax.swing.JFrame {
         portBox = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Roomer");
         setMinimumSize(new java.awt.Dimension(399, 199));
 
         pseudoBox.setText("Pseudo");
 
         serverBox.setText("Adresse IP");
 
-        connectionButton.setText("Connection");
-        connectionButton.setActionCommand("Connexion");
+        connectionButton.setText("Connexion");
         connectionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 connectionButtonActionPerformed(evt);

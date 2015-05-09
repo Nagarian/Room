@@ -39,6 +39,10 @@ public class Connector {
         this.userInfo = userInfo;
     }
     
+    public String getServerName() {
+        return server.getIP() + ":" + server.getPort();
+    }
+    
     public Room ConnectToRoom(String roomName) throws CommunicationException, InvalidDataException, Exception {
         Packet packet = SendPacket(new Packet(userInfo, new Room(roomName, userInfo).toJson().toJSONString(), PacketStatusEnum.EnterRoom));
         

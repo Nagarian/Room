@@ -26,7 +26,10 @@ public class Lounge_GUI extends javax.swing.JFrame {
     public Lounge_GUI(Connector _connector) throws ClassNotFoundException {
         initComponents();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        
         connector = _connector;
+        setTitle("Roomer - " + connector.getServerName());
     }
 
     /**
@@ -45,6 +48,13 @@ public class Lounge_GUI extends javax.swing.JFrame {
         openRoomButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -61,7 +71,7 @@ public class Lounge_GUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(roomListBox);
 
-        resfreshLoungeButton.setText("Rafraichir");
+        resfreshLoungeButton.setText("Rafraîchir");
         resfreshLoungeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resfreshLoungeButtonActionPerformed(evt);
@@ -75,7 +85,7 @@ public class Lounge_GUI extends javax.swing.JFrame {
             }
         });
 
-        openRoomButton.setText("Ouvrir Salle");
+        openRoomButton.setText("Se connecter à la salle");
         openRoomButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openRoomButtonActionPerformed(evt);
@@ -140,7 +150,10 @@ public class Lounge_GUI extends javax.swing.JFrame {
     private void newRoomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newRoomButtonActionPerformed
 
         try {
-            new RoomName_GUI(connector).show();
+            RoomName_GUI roomName = new RoomName_GUI(connector);
+            
+            roomName.setLocationRelativeTo(this);
+            roomName.show();
 
         } catch (Exception ex) {
             Logger.getLogger(Lounge_GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -158,6 +171,10 @@ public class Lounge_GUI extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         connector.Disconnect();
     }//GEN-LAST:event_formWindowClosing
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        resfreshLoungeButtonActionPerformed(null);
+    }//GEN-LAST:event_formWindowGainedFocus
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

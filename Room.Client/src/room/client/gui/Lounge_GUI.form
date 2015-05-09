@@ -9,6 +9,7 @@
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
+    <EventHandler event="windowGainedFocus" listener="java.awt.event.WindowFocusListener" parameters="java.awt.event.WindowEvent" handler="formWindowGainedFocus"/>
     <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
     <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
   </Events>
@@ -84,7 +85,7 @@
     </Container>
     <Component class="javax.swing.JButton" name="resfreshLoungeButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Rafraichir"/>
+        <Property name="text" type="java.lang.String" value="Rafra&#xee;chir"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="resfreshLoungeButtonActionPerformed"/>
@@ -100,7 +101,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="openRoomButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ouvrir Salle"/>
+        <Property name="text" type="java.lang.String" value="Se connecter &#xe0; la salle"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="openRoomButtonActionPerformed"/>
