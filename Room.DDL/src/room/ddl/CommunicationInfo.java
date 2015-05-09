@@ -45,7 +45,7 @@ public class CommunicationInfo {
      * @return the value of ip
      */
     public String getIP() {
-        return ip;
+        return ip.replace("\\", "").replace("/", "");
     }
 
     /**

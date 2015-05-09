@@ -6,6 +6,8 @@
 package room.ddl;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -82,6 +84,7 @@ public class Room {
     public void addClient(Client client) {
         if (client != null) {
             this.clients.add(client);
+            sendMessage("", client, PacketStatusEnum.NewClient);
         }
     }
 
@@ -95,11 +98,20 @@ public class Room {
     }
 
     public void sendMessage(String message, Client from) throws CommunicationException, InvalidDataException {
-        for (Client client : clients) {
-            if (!client.getPseudo().equals(from.getPseudo())) {
-                Utils.SendPacketWithoutResponse(new Packet(from, message, PacketStatusEnum.ReceiveMessage), client.getOwnAddress());
+        sendMessage(message, from, PacketStatusEnum.ReceiveMessage);
+    }
+
+    private void sendMessage(final String message, final Client from, final PacketStatusEnum status) {
+        //new Thread(() -> {
+            for (Client client : clients) {
+                if (!client.getPseudo().equals(from.getPseudo())) {
+                    try {
+                        Utils.SendPacketWithoutResponse(new Packet(from, message, status), client.getOwnAddress());
+                    } catch (CommunicationException | InvalidDataException ex) {
+                    }
+                }
             }
-        }
+        //}).start();
     }
 
     public JSONObject toJson() {
@@ -123,6 +135,8 @@ public class Room {
                 return cl.getPseudo().equals(client.getPseudo());
             });
         }
+
+        sendMessage("", client, PacketStatusEnum.GoodbyClient);
     }
 
     int getNumberOfParticipant() {

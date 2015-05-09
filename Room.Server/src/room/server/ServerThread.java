@@ -41,7 +41,7 @@ class ServerThread implements Runnable {
 
             try {
                 Packet incomingMessage = new Packet(socketIn.readLine());
-                incomingMessage.getUserInfo().getOwnAddress().setIp(socket.getInetAddress().getHostAddress());
+                incomingMessage.getUserInfo().getOwnAddress().setIp(socket.getInetAddress().getHostAddress().replace("\\", "").replace("/", ""));
                 incomingMessage.getUserInfo().getOwnAddress().setPort(socket.getPort());
 
                 switch (incomingMessage.getPacketStatus()) {
