@@ -59,6 +59,10 @@ public class Connector {
         }
     }
     
+    public ClientReceiveMessageThread CreateReceiveMessageThread(ReceiveMessageListener method) {
+        return new ClientReceiveMessageThread(userInfo.getOwnAddress(), method);
+    }
+    
     public void ExitFromRoom(Room room){
         try {
             SendPacketWithoutResponse(new Packet(userInfo, room.toJson().toJSONString(), PacketStatusEnum.ExitRoom));

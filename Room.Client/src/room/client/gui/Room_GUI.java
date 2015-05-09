@@ -9,8 +9,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import room.client.ClientReceiveMessageThread;
 import room.client.Connector;
+import room.client.ReceiveMessageListener;
 import room.ddl.Client;
+import room.ddl.Packet;
 import room.ddl.Room;
 import room.ddl.exception.InvalidDataException;
 
@@ -18,10 +21,11 @@ import room.ddl.exception.InvalidDataException;
  *
  * @author Sylvain
  */
-public class Room_GUI extends javax.swing.JFrame {
+public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListener {
 
     private final Connector connector;
     private Room room;
+    private ClientReceiveMessageThread receiveMessageThread;
     
     Room_GUI(Connector connector, String name) {
         initComponents();
@@ -33,6 +37,7 @@ public class Room_GUI extends javax.swing.JFrame {
         
         try {
             this.room = connector.ConnectToRoom(name);
+            receiveMessageThread = connector.CreateReceiveMessageThread(this);
             refreshConnectedClients();
         } catch (InvalidDataException ex) {
             Logger.getLogger(Room_GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -56,6 +61,10 @@ public class Room_GUI extends javax.swing.JFrame {
         userListPanel.doLayout();
     }
     
+    @Override
+    public void MessageReceived(Packet packet) {
+        //To change body of generated methods, choose Tools | Templates.
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -132,6 +141,7 @@ public class Room_GUI extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         connector.ExitFromRoom(room);
+        receiveMessageThread.Stop();
     }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
