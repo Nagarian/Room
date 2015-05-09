@@ -19,5 +19,7 @@ public enum PacketStatusEnum {
     EnterRoom,
     ExitRoom,
     SendMessage,
-    ReceiveMessage
+    ReceiveMessage,
+    NewClient,
+    GoodbyClient
 }

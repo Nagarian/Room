@@ -17,6 +17,7 @@ import room.client.Connector;
 import room.client.ReceiveMessageListener;
 import room.ddl.Client;
 import room.ddl.Packet;
+import room.ddl.PacketStatusEnum;
 import room.ddl.Room;
 import room.ddl.exception.CommunicationException;
 import room.ddl.exception.InvalidDataException;
@@ -30,17 +31,17 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
     private final Connector connector;
     private Room room;
     private ClientReceiveMessageThread receiveMessageThread;
-    
+
     Room_GUI(Connector connector, String name) {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        DefaultCaret caret = (DefaultCaret)messageDisplayBox.getCaret();
+        DefaultCaret caret = (DefaultCaret) messageDisplayBox.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        
+
         this.connector = connector;
         this.room = null;
-        
+
         try {
             this.receiveMessageThread = connector.ConnectToRoom(name, this);
             this.room = receiveMessageThread.getRoom();
@@ -55,7 +56,7 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
     }
 
     private void refreshConnectedClients() {
-        
+
         DefaultListModel model = new DefaultListModel();
 
         model.clear();
@@ -66,16 +67,26 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
         userListPanel.setModel(model);
         userListPanel.doLayout();
     }
-    
+
     @Override
-    public void MessageReceived(Packet packet) {                                                  
+    public void MessageReceived(Packet packet) {
         SimpleDateFormat simpDate;
         simpDate = new SimpleDateFormat("kk:mm:ss");
-        String str = String.format("[%s] - %s : %s\r\n", packet.getUserInfo().getPseudo(), simpDate.format(new Date()), packet.getMessage());
-        messageDisplayBox.append(str);
-        
+
+        if (packet.getPacketStatus() == PacketStatusEnum.ReceiveMessage) {
+            String str = String.format("[%s] - %s : %s\r\n", packet.getUserInfo().getPseudo(), simpDate.format(new Date()), packet.getMessage());
+            messageDisplayBox.append(str);
+        } else if (packet.getPacketStatus() == PacketStatusEnum.NewClient) {
+            String str = String.format("    %s - %s vient de se connecter\r\n", simpDate.format(new Date()), packet.getUserInfo().getPseudo());
+            messageDisplayBox.append(str);
+            ((DefaultListModel)userListPanel.getModel()).addElement(packet.getUserInfo().getPseudo());
+        } else if (packet.getPacketStatus() == PacketStatusEnum.GoodbyClient) {
+            String str = String.format("    %s - %s vient de se déconnecter\r\n", simpDate.format(new Date()), packet.getUserInfo().getPseudo());
+            messageDisplayBox.append(str);
+            ((DefaultListModel)userListPanel.getModel()).removeElement(packet.getUserInfo().getPseudo());
+        }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -118,6 +129,7 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
+        userListPanel.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(userListPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -164,7 +176,7 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
         simpDate = new SimpleDateFormat("kk:mm:ss");
         String str = String.format("[[Me]] - %s : %s\r\n", simpDate.format(new Date()), messageInputBox.getText());
         messageDisplayBox.append(str);
-        
+
         try {
             connector.SendMessageTo(room, messageInputBox.getText());
             messageInputBox.setText("");

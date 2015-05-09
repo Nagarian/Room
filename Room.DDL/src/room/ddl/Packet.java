@@ -108,6 +108,10 @@ public class Packet {
                 return PacketStatusEnum.SendMessage;
             case "receivemessage":
                 return PacketStatusEnum.ReceiveMessage;
+            case "newclient":
+                return PacketStatusEnum.NewClient;
+            case "exitclient":
+                return PacketStatusEnum.GoodbyClient;
             default:
                 return PacketStatusEnum.Invalid;
         }
@@ -150,6 +154,13 @@ public class Packet {
                 this.status = "receivemessage";
                 break;
 
+            case NewClient:
+                this.status = "newclient";
+                break;
+            case GoodbyClient:
+                this.status = "exitclient";
+                break;
+                
             default:
                 this.status = "";
                 break;

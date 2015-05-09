@@ -39,6 +39,11 @@ public class Connector {
         return server.getIP() + ":" + server.getPort();
     }
     
+    public String getUserName() {
+        return userInfo.getPseudo();
+    }
+    
+    
     public ClientReceiveMessageThread ConnectToRoom(String roomName, ReceiveMessageListener method) throws CommunicationException, InvalidDataException, Exception {
         Packet packet = SendPacket(new Packet(userInfo, new Room(roomName, userInfo).toJson().toJSONString(), PacketStatusEnum.EnterRoom));
         
@@ -101,8 +106,8 @@ public class Connector {
         }
     }
     
-    public Packet SendMessageTo(Room room, String message) throws CommunicationException, InvalidDataException {
-        return SendPacket(new Packet(new Client(userInfo.getOwnAddress(), room, userInfo.getPseudo()), message, PacketStatusEnum.SendMessage));
+    public void SendMessageTo(Room room, String message) throws CommunicationException, InvalidDataException {
+        SendPacketWithoutResponse(new Packet(new Client(userInfo.getOwnAddress(), room, userInfo.getPseudo()), message, PacketStatusEnum.SendMessage));
     }
     
     public Packet SendPacket(Packet packet) throws CommunicationException, InvalidDataException {
