@@ -5,16 +5,14 @@
  */
 package room.client;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import javax.swing.event.EventListenerList;
 import org.json.simple.parser.ParseException;
 import room.ddl.CommunicationInfo;
+import room.ddl.Room;
 import room.ddl.Packet;
 
 /**
@@ -24,9 +22,11 @@ import room.ddl.Packet;
 public class ClientReceiveMessageThread {
 
     private final Thread listenerThread;
+    private Room room;
 //    private final EventListenerList listeners;
 
-    public ClientReceiveMessageThread(CommunicationInfo info, ReceiveMessageListener method) {
+    public ClientReceiveMessageThread(CommunicationInfo info, Room room, ReceiveMessageListener method) {
+        this.room = room;
 //        listeners = new EventListenerList();
         listenerThread = new Thread(() -> {
             ServerSocket serverSocker = null;
@@ -52,7 +52,7 @@ public class ClientReceiveMessageThread {
                 } while (true);
 
             } catch (Exception e) {
-                System.err.println("Exception côté serveur - " + e.getMessage());
+                System.err.println("Exception côté client - " + e.getMessage());
             } finally {
                 try {
                     //On ferme tous les ports, quoi qu'il advienne
@@ -63,12 +63,17 @@ public class ClientReceiveMessageThread {
                 }
             }
         });
+        listenerThread.start();
     }
 
     public void Stop() {
         listenerThread.interrupt();
     }
 
+    public Room getRoom() {
+        return this.room;
+    }
+    
 //    public void AddEventListener(ReceiveMessageListener listener) {
 //        listeners.add(ReceiveMessageListener.class, listener);
 //    }

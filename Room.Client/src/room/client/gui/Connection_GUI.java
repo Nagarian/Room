@@ -102,7 +102,7 @@ public class Connection_GUI extends javax.swing.JFrame {
 
     private void connectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectionButtonActionPerformed
         // Création d'une nouvelle instance du connecteur
-        Client client = new Client(new CommunicationInfo("", 0), pseudoBox.getText());
+        Client client = new Client(new CommunicationInfo("", 24), pseudoBox.getText());
         CommunicationInfo server = new CommunicationInfo(serverBox.getText(), Integer.parseInt(portBox.getText()));
         Connector connector = new Connector(server, client);
 

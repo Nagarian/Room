@@ -10,6 +10,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import room.ddl.exception.CommunicationException;
+import room.ddl.exception.InvalidDataException;
 
 /**
  *
@@ -92,10 +94,10 @@ public class Room {
         return id;
     }
 
-    public void sendMessage(String message, Client from) {
+    public void sendMessage(String message, Client from) throws CommunicationException, InvalidDataException {
         for (Client client : clients) {
-            if (client.getPseudo() != from.getPseudo()) {
-                // TODO : faire l'envoi du message
+            if (!client.getPseudo().equals(from.getPseudo())) {
+                Utils.SendPacketWithoutResponse(new Packet(from, message, PacketStatusEnum.ReceiveMessage), client.getOwnAddress());
             }
         }
     }

@@ -30,9 +30,7 @@ public class RoomServer {
     public static void main(String[] args) {
 
         ServerSocket serverSocker = null;
-        Socket socket = null;
         
-
         try {
             serverLounge = new Lounge(new CommunicationInfo(InetAddress.getLocalHost().getHostAddress(), 23));
 
@@ -40,7 +38,7 @@ public class RoomServer {
             System.out.println("Serveur ouvert et à l'écoute...");
 
             do {
-                socket = serverSocker.accept();
+                Socket socket = serverSocker.accept();
 
                 ServerThread srvThr = new ServerThread(socket);
                 Thread thr = new Thread(srvThr);
@@ -57,10 +55,6 @@ public class RoomServer {
                 //On ferme tous les ports, quoi qu'il advienne
                 if (serverSocker != null) {
                     serverSocker.close();
-                }
-                
-                if (socket != null) {
-                    socket.close();
                 }
             } catch (IOException e) {
             }

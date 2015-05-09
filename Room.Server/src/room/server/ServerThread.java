@@ -41,6 +41,8 @@ class ServerThread implements Runnable {
 
             try {
                 Packet incomingMessage = new Packet(socketIn.readLine());
+                incomingMessage.getUserInfo().getOwnAddress().setIp(socket.getInetAddress().getHostAddress());
+                incomingMessage.getUserInfo().getOwnAddress().setPort(socket.getPort());
 
                 switch (incomingMessage.getPacketStatus()) {
                     case Connection:
@@ -75,7 +77,7 @@ class ServerThread implements Runnable {
                     case SendMessage:
                         try {
                             RoomServer.serverLounge.sendMessage(incomingMessage);
-                            socketOut.println(new Packet(incomingMessage, ""));
+                            //socketOut.println(new Packet(incomingMessage, ""));
                         } catch (Exception ex) {
                             socketOut.println(new Packet(incomingMessage, ex.getLocalizedMessage(), PacketStatusEnum.Error).toString());
                         }
@@ -90,6 +92,10 @@ class ServerThread implements Runnable {
                 System.err.println(sourceToString + " a produit l'erreur " + e.getLocalizedMessage());
                 System.err.println(Arrays.toString(e.getStackTrace()));
                 socketOut.println(new Packet((Packet) null, "InvalidMessage", PacketStatusEnum.Invalid));
+            } finally {
+                socketIn.close();
+                socketOut.close();
+                socket.close();
             }
 
             System.out.println("Fermeture de la connexion " + sourceToString);

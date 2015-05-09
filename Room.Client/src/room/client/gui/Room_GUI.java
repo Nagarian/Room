@@ -5,16 +5,20 @@
  */
 package room.client.gui;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.text.DefaultCaret;
 import room.client.ClientReceiveMessageThread;
 import room.client.Connector;
 import room.client.ReceiveMessageListener;
 import room.ddl.Client;
 import room.ddl.Packet;
 import room.ddl.Room;
+import room.ddl.exception.CommunicationException;
 import room.ddl.exception.InvalidDataException;
 
 /**
@@ -31,13 +35,15 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        DefaultCaret caret = (DefaultCaret)messageDisplayBox.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         
         this.connector = connector;
         this.room = null;
         
         try {
-            this.room = connector.ConnectToRoom(name);
-            receiveMessageThread = connector.CreateReceiveMessageThread(this);
+            this.receiveMessageThread = connector.ConnectToRoom(name, this);
+            this.room = receiveMessageThread.getRoom();
             refreshConnectedClients();
         } catch (InvalidDataException ex) {
             Logger.getLogger(Room_GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -62,8 +68,12 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
     }
     
     @Override
-    public void MessageReceived(Packet packet) {
-        //To change body of generated methods, choose Tools | Templates.
+    public void MessageReceived(Packet packet) {                                                  
+        SimpleDateFormat simpDate;
+        simpDate = new SimpleDateFormat("kk:mm:ss");
+        String str = String.format("[%s] - %s : %s\r\n", packet.getUserInfo().getPseudo(), simpDate.format(new Date()), packet.getMessage());
+        messageDisplayBox.append(str);
+        
     }
     
     /**
@@ -89,13 +99,18 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
             }
         });
 
+        messageDisplayBox.setEditable(false);
         messageDisplayBox.setColumns(20);
+        messageDisplayBox.setLineWrap(true);
         messageDisplayBox.setRows(5);
         jScrollPane1.setViewportView(messageDisplayBox);
 
-        messageInputBox.setText("jTextField1");
-
         sendMessageButton.setText("Répondre");
+        sendMessageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendMessageButtonActionPerformed(evt);
+            }
+        });
 
         userListPanel.setBackground(new java.awt.Color(240, 240, 240));
         userListPanel.setModel(new javax.swing.AbstractListModel() {
@@ -143,6 +158,20 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
         connector.ExitFromRoom(room);
         receiveMessageThread.Stop();
     }//GEN-LAST:event_formWindowClosing
+
+    private void sendMessageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendMessageButtonActionPerformed
+        SimpleDateFormat simpDate;
+        simpDate = new SimpleDateFormat("kk:mm:ss");
+        String str = String.format("[[Me]] - %s : %s\r\n", simpDate.format(new Date()), messageInputBox.getText());
+        messageDisplayBox.append(str);
+        
+        try {
+            connector.SendMessageTo(room, messageInputBox.getText());
+            messageInputBox.setText("");
+        } catch (CommunicationException | InvalidDataException ex) {
+            Logger.getLogger(Room_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_sendMessageButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

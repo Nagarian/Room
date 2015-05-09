@@ -32,7 +32,7 @@ public class CommunicationInfo {
             this.ip = "localhost";
         }
 
-        if (obj.containsKey("pseudo")) {
+        if (obj.containsKey("port")) {
             this.port = Integer.parseInt(obj.get("port").toString());
         } else {
             this.port = 23;

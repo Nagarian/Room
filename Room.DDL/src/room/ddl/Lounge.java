@@ -11,6 +11,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import room.ddl.exception.ClientAlreadyConnectedException;
+import room.ddl.exception.CommunicationException;
+import room.ddl.exception.InvalidDataException;
 import room.ddl.exception.RoomNotFoundException;
 
 /**
@@ -95,7 +97,7 @@ public class Lounge {
             }
         }
 
-        this.rooms.add(room);
+        this.rooms.add(new Room(room.getName(), client));
 
         return room;
     }
@@ -152,7 +154,7 @@ public class Lounge {
         }
     }
 
-    public void sendMessage(Packet packet) throws RoomNotFoundException {
+    public void sendMessage(Packet packet) throws RoomNotFoundException, CommunicationException, InvalidDataException {
         Room room = packet.getUserInfo().getRoom();
         Client sender = packet.getUserInfo();
         String message = packet.getMessage();
