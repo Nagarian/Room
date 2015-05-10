@@ -97,7 +97,6 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSplitPane1 = new javax.swing.JSplitPane();
         jSplitPane2 = new javax.swing.JSplitPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         userListPanel = new javax.swing.JList();
@@ -108,6 +107,7 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
         sendMessageButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(650, 280));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -201,7 +201,6 @@ public class Room_GUI extends javax.swing.JFrame implements ReceiveMessageListen
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTextArea messageDisplayBox;
     private javax.swing.JTextField messageInputBox;

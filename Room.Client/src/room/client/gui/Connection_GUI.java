@@ -56,6 +56,7 @@ public class Connection_GUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Roomer");
         setMinimumSize(new java.awt.Dimension(399, 199));
+        setResizable(false);
 
         serverBox.setText("localhost");
 

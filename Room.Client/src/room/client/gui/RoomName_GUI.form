@@ -60,7 +60,7 @@
   <SubComponents>
     <Component class="javax.swing.JTextField" name="roomNameBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Test"/>
+        <Property name="text" type="java.lang.String" value="Nouvelle salle"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">

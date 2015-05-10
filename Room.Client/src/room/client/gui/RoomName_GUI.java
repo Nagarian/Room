@@ -41,7 +41,7 @@ public class RoomName_GUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        roomNameBox.setText("Test");
+        roomNameBox.setText("Nouvelle salle");
 
         jLabel1.setText("Entrer le nom de votre salle :");
 
