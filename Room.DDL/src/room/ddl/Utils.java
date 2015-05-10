@@ -18,6 +18,7 @@ import room.ddl.exception.InvalidDataException;
  * @author Benoît
  */
 public class Utils {
+
     public static Packet SendPacket(Packet packet, CommunicationInfo server) throws CommunicationException, InvalidDataException {
         Socket socket = null;
         BufferedReader reader = null;
@@ -29,9 +30,9 @@ public class Utils {
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new PrintWriter(socket.getOutputStream(), true);
 
-            packet.getUserInfo().getOwnAddress().setIp(socket.getInetAddress().toString());
+            packet.getUserInfo().getOwnAddress().setIp(socket.getInetAddress().getHostAddress().replace("\\", "").replace("/", ""));
             packet.getUserInfo().getOwnAddress().setPort(socket.getPort());
-            
+
             writer.println(packet.toString());
             String result = reader.readLine();
 
@@ -50,8 +51,12 @@ public class Utils {
             }
         }
     }
-    
+
     public static void SendPacketWithoutResponse(Packet packet, CommunicationInfo server) throws CommunicationException, InvalidDataException {
+        SendPacketWithoutResponse(packet, server, true);
+    }
+
+    public static void SendPacketWithoutResponse(Packet packet, CommunicationInfo server, Boolean overrideSender) throws CommunicationException, InvalidDataException {
         Socket socket = null;
         PrintWriter writer = null;
 
@@ -60,9 +65,11 @@ public class Utils {
             socket = new Socket(server.getIP(), server.getPort());
             writer = new PrintWriter(socket.getOutputStream(), true);
 
-            packet.getUserInfo().getOwnAddress().setIp(socket.getInetAddress().toString());
-            packet.getUserInfo().getOwnAddress().setPort(socket.getPort());
-            
+            if (overrideSender) {
+                packet.getUserInfo().getOwnAddress().setIp(socket.getInetAddress().getHostAddress().replace("\\", "").replace("/", ""));
+                packet.getUserInfo().getOwnAddress().setPort(socket.getPort());
+            }
+
             writer.println(packet.toString());
         } catch (IOException ex) {
             throw new CommunicationException();

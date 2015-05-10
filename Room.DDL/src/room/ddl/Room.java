@@ -102,16 +102,16 @@ public class Room {
     }
 
     private void sendMessage(final String message, final Client from, final PacketStatusEnum status) {
-        //new Thread(() -> {
+        new Thread(() -> {
             for (Client client : clients) {
                 if (!client.getPseudo().equals(from.getPseudo())) {
                     try {
-                        Utils.SendPacketWithoutResponse(new Packet(from, message, status), client.getOwnAddress());
+                        Utils.SendPacketWithoutResponse(new Packet(from, message, status), client.getOwnAddress(), false);
                     } catch (CommunicationException | InvalidDataException ex) {
                     }
                 }
             }
-        //}).start();
+        }).start();
     }
 
     public JSONObject toJson() {
